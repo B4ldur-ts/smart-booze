@@ -92,8 +92,8 @@ client.on('message', function (topic, message) {
         console.log("________________________________");
     } */
 
-    //TODO: divide by 1000
-    uploadObject.value = message.toString().slice(16, 20);
+
+    uploadObject.value = parseInt(message.toString().slice(16, 20)) / 1000;
     uploadObject.id = message.toString().slice(0, 16);
     messageNumber = message.toString().slice(20);
     
