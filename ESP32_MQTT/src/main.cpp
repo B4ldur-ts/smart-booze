@@ -35,6 +35,13 @@ char datePath[100] = "";
 char messagePath[100] = "";
 char deviceIdPath[100] = "";
 
+
+//placeholder for the outgoing message
+char message[27] = "";
+char valueString[5] = "";
+char numberString[7] = "";
+int valueInt = 0;
+
 String date = "06042022";
 String timeNow = "0856";
 
@@ -53,6 +60,8 @@ int command1 = 0;
 const char *sensor1_topic = "sensor1";
 const char *sensor2_topic = "sensor2";
 const char *userIdTopic = "setUserId";
+
+const char *path = "devices";
 
 const char *command1_topic = "command1";
 
@@ -224,7 +233,7 @@ void publishMessage(const char *topic, String payload, boolean retained)
 
 void updatePaths()
 {
-  strcat(timePath, userId.c_str());
+  /* strcat(timePath, userId.c_str());
   strcat(timePath, "/time");
   strcat(valuePath, userId.c_str());
   strcat(valuePath, "/value");
@@ -233,20 +242,33 @@ void updatePaths()
   strcat(messagePath, userId.c_str());
   strcat(messagePath, "/messageNumber");
   strcat(deviceIdPath, userId.c_str());
-  strcat(deviceIdPath, "/userId");
+  strcat(deviceIdPath, "/userId"); */
+  memset(valueString, '\0', 5);
+  memset(numberString, '\0', 7);
+  for(int i = 16; i < 27; i++){
+    message[i] = '\0';
+  }
 }
 
 void sendValueToBroker(float value)
 {
-  timeNow = getTime();
+ /*  timeNow = getTime();
   date = getDate();
   // publishMessage(sensor1_topic, String(sensor1), true);
   publishMessage(timePath, timeNow, true);
   publishMessage(datePath, date, true);
   publishMessage(valuePath, String(value), true);
   publishMessage(messagePath, String(messagesSent), true);
-  publishMessage(deviceIdPath, userId, true);
+  publishMessage(deviceIdPath, userId, true); */
   // publishMessage(sensor2_topic, String(sensor2), true);
+  valueInt = value * 1000;  //convert to int to save some storage and avoid sprintf w/ float. Needs to be converted back.
+  strcat(message, userId.c_str());
+  snprintf(valueString,4,"%d", valueInt);
+  strcat(message, valueString);
+  snprintf(numberString,7,"%d", messagesSent);
+  strcat(message, numberString);
+  publishMessage(path, message ,true);
+  updatePaths();
   messagesSent++;
   EEPROM.write(0, messagesSent);
   EEPROM.commit();

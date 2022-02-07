@@ -17,6 +17,9 @@ let firebasedb = require('firebase/database');
 
 let received = 0;
 
+let date_ob = new Date();
+
+
 const firebaseConfig = {
     apiKey: "AIzaSyCK7xzDTTzflkvvpLtaEuUSZdBR3Qq-2R4",
     authDomain: "smart-booze.firebaseapp.com",
@@ -53,8 +56,6 @@ let uploadObject = {
     date: "",
     id: "",
 
-
-
 }
 
 let messageNumber;
@@ -64,7 +65,7 @@ const client = mqtt.connect('tls://e6c0f2b4d98b45a58474f291fbfdcec4.s1.eu.hivemq
 
 
 client.on('message', function (topic, message) {
-    if (topic.includes('value')) {
+   /*  if (topic.includes('value')) {
         console.log("Value: " + message.toString());
         uploadObject.value = message.toString();
     }
@@ -89,10 +90,55 @@ client.on('message', function (topic, message) {
         }
 
         console.log("________________________________");
-    }
+    } */
+
+    //TODO: divide by 1000
+    uploadObject.value = message.toString().slice(16, 20);
+    uploadObject.id = message.toString().slice(0, 16);
+    messageNumber = message.toString().slice(20);
+    
 
 
 
+
+// current date
+// adjust 0 before single digit date
+let date = ("0" + date_ob.getDate()).slice(-2);
+
+// current month
+let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
+
+// current year
+let year = date_ob.getFullYear();
+
+// current hours
+let hours = date_ob.getHours();
+
+// current minutes
+let minutes = date_ob.getMinutes();
+
+// current seconds
+let seconds = date_ob.getSeconds();
+
+// prints date in YYYYMMDD format
+uploadObject.date = (year +  month +  date);
+
+// prints date & time in YYYY-MM-DD HH:MM:SS format
+//console.log(year + "-" + month + "-" + date + " " + hours + ":" + minutes + ":" + seconds);
+
+// prints time in HH:MM:SS format
+uploadObject.time =hours  + minutes + seconds;
+
+
+console.log(uploadObject.value);
+    console.log(uploadObject.id);
+    console.log(messageNumber);
+    console.log(uploadObject.date);
+    console.log(uploadObject.time);
+    console.log("________________________________");
+
+
+    updateDatabase(uploadObject.id, uploadObject, messageNumber);
 
 });
 // reassurance that the connection worked
