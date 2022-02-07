@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router';
 import store from "./store";
+import baseLayout from "./views/baseLayout.vue";
 
 import { IonicVue } from '@ionic/vue';
 
@@ -30,7 +31,7 @@ use(IonicVue, {
   rippleEffect: "true",
 });
   
-  
+app.component("base-layout", baseLayout);
 router.isReady().then(() => {
   app.mount('#app');
 });

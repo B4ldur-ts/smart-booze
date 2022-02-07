@@ -1,10 +1,10 @@
 <!--With help from Max -->
 <template>
-	<base-layout tabTitle="Wunderbar App">
+	<base-layout tabTitle="Smart Booze">
 		<ion-content :fullscreen="true">
 			<ion-card>
 				<ion-card-header>
-					<ion-card-subtitle>Willkommen bei der Wunderbar</ion-card-subtitle>
+					<ion-card-subtitle>Fass' deinen Alkoholkonsum in Zahlen!</ion-card-subtitle>
 					<ion-card-title>
 						{{
 							mode === AuthMode.SignIn ? "Anmelden" : "Registrieren"

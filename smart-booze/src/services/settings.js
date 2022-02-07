@@ -3,17 +3,18 @@ import store from "../store/index";
 
 export default function setDarkMode(bool) {
   var darkMode = false;
-  if (bool) {
-    if (!document.body.classList.contains("dark")) {
-      document.body.classList.add("dark");
-      darkMode = true;
-    }
-  } else {
-    if (document.body.classList.contains("dark")) {
-      document.body.classList.remove("dark");
-      darkMode = false;
-    }
-  }
+  darkMode = bool;
+  // if (bool) {
+  //   if (!document.body.classList.contains("dark")) {
+  //     document.body.classList.add("dark");
+  //     darkMode = true;
+  //   }
+  // } else {
+  //   if (document.body.classList.contains("dark")) {
+  //     document.body.classList.remove("dark");
+  //     darkMode = false;
+  //   }
+  // }
   store.commit("setdarkMode", darkMode);
   set("darkMode", darkMode);
 }
