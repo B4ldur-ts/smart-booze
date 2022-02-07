@@ -34,6 +34,7 @@ char valuePath[100] = "";
 char datePath[100] = "";
 char messagePath[100] = "";
 char deviceIdPath[100] = "";
+const char *path = "devices";
 
 
 //placeholder for the outgoing message
@@ -61,7 +62,7 @@ const char *sensor1_topic = "sensor1";
 const char *sensor2_topic = "sensor2";
 const char *userIdTopic = "setUserId";
 
-const char *path = "devices";
+
 
 const char *command1_topic = "command1";
 

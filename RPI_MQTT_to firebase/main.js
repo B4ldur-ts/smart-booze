@@ -154,7 +154,7 @@ client.on('error', (error) => {
 
 
 // subscribe and publish to the same topic
-client.subscribe('123456/#');
+client.subscribe('devices/#');
 //client.publish('messages', 'Hello, this message was received!');
 
 
