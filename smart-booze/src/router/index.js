@@ -1,11 +1,25 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
-import { RouteRecordRaw } from 'vue-router';
 import TabsPage from '../views/TabsPage.vue'
+
+
+import { auth } from "../services/firebase-realtimedb";
+
+const guard = (to, from, next) => {
+  try {
+    if (auth.currentUser?.uid && auth.currentUser.emailVerified) {
+      next();
+    } else {
+      next("/");
+    }
+  } catch (error) {
+    next("/");
+  }
+};
 
 const routes = [
   {
-    path: '/',
-    redirect: '/tabs/tab1'
+    path: "/",
+    component: () => import("../views/login.vue"),
   },
   {
     path: '/tabs/',
@@ -13,19 +27,23 @@ const routes = [
     children: [
       {
         path: '',
-        redirect: '/tabs/tab1'
+        redirect: '/tabs/tab1',
+        beforeEnter: guard,
       },
       {
         path: 'tab1',
-        component: () => import('@/views/Tab1Page.vue')
+        component: () => import('@/views/Tab1Page.vue'),
+        beforeEnter: guard,
       },
       {
         path: 'tab2',
-        component: () => import('@/views/Tab2Page.vue')
+        component: () => import('@/views/Tab2Page.vue'),
+        beforeEnter: guard,
       },
       {
         path: 'tab3',
-        component: () => import('@/views/Tab3Page.vue')
+        component: () => import('@/views/Tab3Page.vue'),
+        beforeEnter: guard,
       }
     ]
   }

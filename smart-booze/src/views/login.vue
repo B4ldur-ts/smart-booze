@@ -1,3 +1,4 @@
+<!--With help from Max -->
 <template>
 	<base-layout tabTitle="Wunderbar App">
 		<ion-content :fullscreen="true">
