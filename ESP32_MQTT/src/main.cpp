@@ -6,15 +6,11 @@
  * Jul 13 2021
  */
 
-#ifdef ESP8266
-#include <ESP8266WiFi.h> // Pins for board ESP8266 Wemos-NodeMCU
-#else
 #include <WiFi.h>
-#endif
-
 #include "Arduino.h"
 #include <PubSubClient.h>
 #include <WiFiClientSecure.h>
+#include "EEPROM.h"
 
 //---- WiFi settings
 
@@ -29,7 +25,18 @@ const int mqtt_port = 8883;
 
 //---- Device Settings
 // set when device is initialized
-String userId = "";
+String userId = "123456";
+uint8_t messagesSent = 0;
+
+// Path settings
+char timePath[100] = "";
+char valuePath[100] = "";
+char datePath[100] = "";
+char messagePath[100] = "";
+char deviceIdPath[100] = "";
+
+String date = "06042022";
+String timeNow = "0856";
 
 WiFiClientSecure espClient; // for no secure connection use WiFiClient instead of WiFiClientSecure
 // WiFiClient espClient;
@@ -40,16 +47,14 @@ unsigned long lastMsg = 0;
 char msg[MSG_BUFFER_SIZE];
 
 int sensor1 = 0;
-float sensor2 = 0;
+float value = 0;
 int command1 = 0;
 
 const char *sensor1_topic = "sensor1";
 const char *sensor2_topic = "sensor2";
 const char *userIdTopic = "setUserId";
-// const char*  sensor2_topic="sensor3";
 
 const char *command1_topic = "command1";
-// const char* command1_topic="command2";
 
 static const char *root_ca PROGMEM = R"EOF(
 -----BEGIN CERTIFICATE-----
@@ -85,8 +90,14 @@ emyPxgcYxn/eR44/KJ4EBs+lVDR3veyJm+kXQ99b21/+jh5Xos1AnX5iItreGCc=
 -----END CERTIFICATE-----
 )EOF";
 
+/* Function prototypes */
+
 void callback(char *, byte *, unsigned int);
 void publishMessage(const char *, String, boolean);
+void updatePaths();
+void sendValueToBroker(float);
+String getDate();
+String getTime();
 
 //=========== Setup WiFi, will be  replaced by GSM Module =========
 void setup_wifi()
@@ -142,14 +153,11 @@ void setup()
   while (!Serial)
     delay(1);
   setup_wifi();
-  pinMode(BUILTIN_LED, OUTPUT); // Initialize the BUILTIN_LED pin as an output
+  EEPROM.begin(4);
+  messagesSent = EEPROM.read(0);
 
-#ifdef ESP8266
-  espClient.setInsecure();
-#else // for the ESP32
   espClient.setCACert(root_ca); // enable this line and the the "certificate" code for secure connection
-#endif
-
+  updatePaths();
   client.setServer(mqtt_server, mqtt_port);
   client.setCallback(callback);
 }
@@ -162,19 +170,15 @@ void loop()
     reconnect();
   client.loop();
 
-  //---- example: how to publish sensor values every 5 sec
   unsigned long now = millis();
-  if (now - lastMsg > 5000)
+  if (now - lastMsg > 10000)
   {
     lastMsg = now;
-    sensor1 = random(50);      // replace the random value with your sensor value
-    sensor2 = 20 + random(80); // replace the random value  with your sensor value
-    publishMessage(sensor1_topic, String(sensor1), true);
-    publishMessage(sensor2_topic, String(sensor2), true);
+    sendValueToBroker(0.008);
   }
 }
 
-//============= Called when new message arrives. Will be only used in Setup process ===========
+//============= Called when new message arrives. Will be used in Setup process only ===========
 
 void callback(char *topic, byte *payload, unsigned int length)
 {
@@ -195,7 +199,7 @@ void callback(char *topic, byte *payload, unsigned int length)
 
   else if (strcmp(topic, userIdTopic) == 0)
   {
-    userId = incommingMessage;
+    // userId = incommingMessage;
   }
 
   //  check for other commands
@@ -205,9 +209,55 @@ void callback(char *topic, byte *payload, unsigned int length)
    */
 }
 
+void updateDeviceId(String newID)
+{
+  userId = newID;
+  updatePaths();
+}
+
 //================= publishing as strings ===========
 void publishMessage(const char *topic, String payload, boolean retained)
 {
   client.publish(topic, (byte *)payload.c_str(), 10, true);
   Serial.println("Message published [" + String(topic) + "]: " + payload);
+}
+
+void updatePaths()
+{
+  strcat(timePath, userId.c_str());
+  strcat(timePath, "/time");
+  strcat(valuePath, userId.c_str());
+  strcat(valuePath, "/value");
+  strcat(datePath, userId.c_str());
+  strcat(datePath, "/date");
+  strcat(messagePath, userId.c_str());
+  strcat(messagePath, "/messageNumber");
+  strcat(deviceIdPath, userId.c_str());
+  strcat(deviceIdPath, "/userId");
+}
+
+void sendValueToBroker(float value)
+{
+  timeNow = getTime();
+  date = getDate();
+  // publishMessage(sensor1_topic, String(sensor1), true);
+  publishMessage(timePath, timeNow, true);
+  publishMessage(datePath, date, true);
+  publishMessage(valuePath, String(value), true);
+  publishMessage(messagePath, String(messagesSent), true);
+  publishMessage(deviceIdPath, userId, true);
+  // publishMessage(sensor2_topic, String(sensor2), true);
+  messagesSent++;
+  EEPROM.write(0, messagesSent);
+  EEPROM.commit();
+}
+
+String getTime()
+{
+  return "0956";
+}
+
+String getDate()
+{
+  return "06042022";
 }
