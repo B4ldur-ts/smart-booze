@@ -1,0 +1,7 @@
+{
+  "name": "smart-booze",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue"
+}
