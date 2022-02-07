@@ -166,7 +166,7 @@ export default {
 					del("password");
 				}
 				//initGetWholeObject();
-				router.push("/tabs/tab1");
+				router.push("/tabs/messung");
 			} catch (error) {
 				if (
 					error.message ===
@@ -210,7 +210,7 @@ export default {
 				});
 				console.log(authRes.user.displayName);
 				addUserToDb(name);
-				router.push("/tabs/tab1");
+				router.push("/tabs/messung");
 			} catch (error) {
 				state.errorMsg = error.message;
 			}

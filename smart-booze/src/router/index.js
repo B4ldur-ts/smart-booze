@@ -31,17 +31,17 @@ const routes = [
         beforeEnter: guard,
       },
       {
-        path: 'tab1',
-        component: () => import('@/views/Tab1Page.vue'),
+        path: 'messung',
+        component: () => import('@/views/messung.vue'),
         beforeEnter: guard,
       },
       {
-        path: 'tab2',
-        component: () => import('@/views/Tab2Page.vue'),
+        path: 'verlauf',
+        component: () => import('@/views/verlauf.vue'),
         beforeEnter: guard,
       },
       {
-        path: 'tab3',
+        path: 'settings',
         component: () => import('@/views/settingsTab.vue'),
         beforeEnter: guard,
       }

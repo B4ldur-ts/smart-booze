@@ -10,7 +10,7 @@
           </ion-button>
         </ion-buttons>
         <ion-buttons slot="start" v-if="showBackButton">
-          <ion-back-button default-href="/tabs/tab1" ref="backButton">
+          <ion-back-button default-href="/tabs/messung" ref="backButton">
           </ion-back-button>
         </ion-buttons>
       </ion-toolbar>
