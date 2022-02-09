@@ -12,8 +12,9 @@
 				</ion-toolbar>
 			</ion-header>
 			<ion-button @click="go"> Go! </ion-button>
+			<ion-button @click="makeCircle"> Make Circle </ion-button>
 			<div class="messung">
-				<div id="canvas">
+				<div id="sthElse">
 					<span class="point" ref="point_0"></span>
 					<span class="point" ref="point_1"></span>
 					<span class="point" ref="point_2"></span>
@@ -36,7 +37,7 @@
 					<span class="point" ref="point_19"></span>
 					<span class="point" ref="point_20"></span>
 				</div>
-				<div class="messung-center"></div>
+				<!-- <div class="messung-center"></div> -->
 				<div class="messung-pendel-container">
 					<div class="messung-pendel" ref="pendel"></div>
 				</div>
@@ -59,25 +60,26 @@ export default  defineComponent({
     };
   },
   mounted(){
-    this.makeCircle();
   },
   methods:{
     go(){
-      this.rotationAngle += 90;
+      this.rotationAngle += 30;
       translate(this.$refs.pendel, this.rotationAngle);
     },
     makeCircle(){
-      let radius = 200;
+      let radius = (screen.width/2) * 0.8;
       let step = Math.PI / 20;
-      let shiftX = 300;
-      let shiftY = 20;
+      let shiftX = 0 ;
+      let shiftY = 0;
+		
       for(let i= 0; i<=20; i++){
-        let x = radius * Math.cos(step*i);
-        let y = radius * Math.sin(step*i);
+        let x = Math.round(radius * Math.cos(step*i));
+        let y = Math.round(radius * Math.sin(step*i));
         let inputName = 'point_' + i;
-        this.$refs[inputName].style.left = x + shiftX;
-                this.$refs[inputName].style.bottom = y - shiftY;
-
+        this.$refs[inputName].style.left = x + shiftX +'px';
+                this.$refs[inputName].style.bottom = y - shiftY + 'px';
+				this.$refs[inputName].style.transform = `rotate(${-(i*9)+90}deg)`;
+		
       }
 
     }
@@ -88,9 +90,10 @@ export default  defineComponent({
 <style scoped>
 .messung {
 	position: relative;
-	margin-top: 50vh;
-	margin-left: 50vw;
-	margin-right: 50vw;
+	margin-top: 30vh;
+	margin: auto;
+	width: 50%;
+	height: 20%;
 }
 .messung-center {
 	height: 25px;
@@ -100,32 +103,36 @@ export default  defineComponent({
 	z-index: 303;
 }
 .messung-pendel {
-	position: absolute;
+	position: relative;
 	border-left: solid green;
 	height: 20vh;
-	top: -15px;
-	left: 15px;
-
+	margin: auto;
+	top: 29.25vh;
 	-webkit-transform: rotate(180deg);
 	-webkit-transform-origin: 0% 0%;
 }
 .messung-pendel-container {
 	position: relative;
+	margin-left: 50%;
 }
 
 .point {
 	position: absolute;
 	display: block;
 	height: 10px;
-	width: 10px;
-	border-radius: 5px;
+	width: 1px;
+	/* border-radius: 5px; */
 	background-color: #000;
+	z-index: 500;
 }
 
-#canvas {
-	position: relative;
-	margin-top: 1vh;
-	margin-left: 50vw;
-	margin-right: 50vw;
+#sthElse {
+	position: absolute;
+	margin-left: 50%;
+
+	width: 200px;
+	height: 200px;
+
+	z-index: 400;
 }
 </style>
