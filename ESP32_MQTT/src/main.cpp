@@ -25,8 +25,8 @@ const int mqtt_port = 8883;
 
 //---- Device Settings
 // set when device is initialized
-String userId = "123456";
-uint8_t messagesSent = 0;
+String userId = "29bb3021-e9ce-44d1-9a38-5fe98e89ac83";
+int messagesSent = 0;
 
 // Path settings
 char timePath[100] = "";
@@ -35,10 +35,8 @@ char datePath[100] = "";
 char messagePath[100] = "";
 char deviceIdPath[100] = "";
 const char *path = "devices";
-
-
-//placeholder for the outgoing message
-char message[27] = "";
+// placeholder for the outgoing message
+char message[46] = "";
 char valueString[5] = "";
 char numberString[7] = "";
 int valueInt = 0;
@@ -61,8 +59,6 @@ int command1 = 0;
 const char *sensor1_topic = "sensor1";
 const char *sensor2_topic = "sensor2";
 const char *userIdTopic = "setUserId";
-
-
 
 const char *command1_topic = "command1";
 
@@ -164,12 +160,13 @@ void setup()
     delay(1);
   setup_wifi();
   EEPROM.begin(4);
-  messagesSent = EEPROM.read(0);
+  messagesSent = EEPROM.read(1);
 
   espClient.setCACert(root_ca); // enable this line and the the "certificate" code for secure connection
   updatePaths();
   client.setServer(mqtt_server, mqtt_port);
   client.setCallback(callback);
+  strcat(message, userId.c_str());
 }
 
 //======================== loop =========================
@@ -184,7 +181,7 @@ void loop()
   if (now - lastMsg > 10000)
   {
     lastMsg = now;
-    sendValueToBroker(0.008);
+    sendValueToBroker(0.8);
   }
 }
 
@@ -228,7 +225,7 @@ void updateDeviceId(String newID)
 //================= publishing as strings ===========
 void publishMessage(const char *topic, String payload, boolean retained)
 {
-  client.publish(topic, (byte *)payload.c_str(), 10, true);
+  client.publish(topic, (byte *)payload.c_str(), 46, true);
   Serial.println("Message published [" + String(topic) + "]: " + payload);
 }
 
@@ -246,36 +243,38 @@ void updatePaths()
   strcat(deviceIdPath, "/userId"); */
   memset(valueString, '\0', 5);
   memset(numberString, '\0', 7);
-  for(int i = 16; i < 27; i++){
+  for (int i = 36; i < 46; i++)
+  {
     message[i] = '\0';
   }
 }
 
 void sendValueToBroker(float value)
 {
- /*  timeNow = getTime();
-  date = getDate();
-  // publishMessage(sensor1_topic, String(sensor1), true);
-  publishMessage(timePath, timeNow, true);
-  publishMessage(datePath, date, true);
-  publishMessage(valuePath, String(value), true);
-  publishMessage(messagePath, String(messagesSent), true);
-  publishMessage(deviceIdPath, userId, true); */
+  /*  timeNow = getTime();
+   date = getDate();
+   // publishMessage(sensor1_topic, String(sensor1), true);
+   publishMessage(timePath, timeNow, true);
+   publishMessage(datePath, date, true);
+   publishMessage(valuePath, String(value), true);
+   publishMessage(messagePath, String(messagesSent), true);
+   publishMessage(deviceIdPath, userId, true); */
   // publishMessage(sensor2_topic, String(sensor2), true);
-  valueInt = value * 1000;  //convert to int to save some storage and avoid sprintf w/ float. Needs to be converted back.
-  strcat(message, userId.c_str());
-  snprintf(valueString,4,"%d", valueInt);
-  strcat(message, valueString);
-  snprintf(numberString,7,"%d", messagesSent);
+
+  snprintf(numberString, 7, "%06d", messagesSent);
   strcat(message, numberString);
-  publishMessage(path, message ,true);
+  valueInt = value * 1000; // convert to int to save some storage and avoid sprintf w/ float. Needs to be converted back.
+  snprintf(valueString, 5, "%04d", valueInt);
+  strcat(message, valueString);
+  publishMessage(path, message, true);
   updatePaths();
   messagesSent++;
-  EEPROM.write(0, messagesSent);
+  EEPROM.write(1, messagesSent);
   EEPROM.commit();
 }
 
-String getTime()
+String
+getTime()
 {
   return "0956";
 }

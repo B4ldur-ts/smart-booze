@@ -17,7 +17,6 @@ let firebasedb = require('firebase/database');
 
 let received = 0;
 
-let date_ob = new Date();
 
 
 const firebaseConfig = {
@@ -65,72 +64,33 @@ const client = mqtt.connect('tls://e6c0f2b4d98b45a58474f291fbfdcec4.s1.eu.hivemq
 
 
 client.on('message', function (topic, message) {
-   /*  if (topic.includes('value')) {
-        console.log("Value: " + message.toString());
-        uploadObject.value = message.toString();
-    }
-    else if (topic.includes('time')) {
-        console.log("Time: " + message.toString());
-        uploadObject.time = message.toString();
+    let date_ob = new Date();
 
-    } else if (topic.includes('date')) {
-        console.log("Date: " + message.toString());
-        uploadObject.date = message.toString();
+    uploadObject.id = message.toString().slice(0, 36);
+    uploadObject.value = parseInt(message.toString().slice(42, 47)) / 1000;
+    messageNumber = message.toString().slice(36, 42);
+    // current date
+    // adjust 0 before single digit date
+    let date = ("0" + date_ob.getDate()).slice(-2);
+    // current month
+    let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
+    // current year
+    let year = date_ob.getFullYear();
+    // current hours
+    let hours = ("0" + (date_ob.getHours() + 1)).slice(-2);
+    // current minutes
+    let minutes = ("0" + (date_ob.getMinutes() + 1)).slice(-2);
+    // current seconds
+    let seconds = ("0" + (date_ob.getSeconds() + 1)).slice(-2);
 
-    } else if (topic.includes('message')) {
-        console.log("MessageNumber: " + message.toString());
-        messageNumber = message.toString();
-    }
-    else if (topic.includes('userId')) {
-        console.log("UserID: " + message.toString());
-        uploadObject.id = message.toString();
-        received++;
-        if (received > 3) {
-            updateDatabase(uploadObject.id, uploadObject, messageNumber);
-        }
+    // prints date in YYYYMMDD format
+    uploadObject.date = (year + month + date);
 
-        console.log("________________________________");
-    } */
+    // prints time in HH:MM:SS format
+    uploadObject.time = hours.toString() + minutes.toString() + seconds.toString();
 
 
-    uploadObject.value = parseInt(message.toString().slice(16, 20)) / 1000;
-    uploadObject.id = message.toString().slice(0, 16);
-    messageNumber = message.toString().slice(20);
-    
-
-
-
-
-// current date
-// adjust 0 before single digit date
-let date = ("0" + date_ob.getDate()).slice(-2);
-
-// current month
-let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
-
-// current year
-let year = date_ob.getFullYear();
-
-// current hours
-let hours = date_ob.getHours();
-
-// current minutes
-let minutes = date_ob.getMinutes();
-
-// current seconds
-let seconds = date_ob.getSeconds();
-
-// prints date in YYYYMMDD format
-uploadObject.date = (year +  month +  date);
-
-// prints date & time in YYYY-MM-DD HH:MM:SS format
-//console.log(year + "-" + month + "-" + date + " " + hours + ":" + minutes + ":" + seconds);
-
-// prints time in HH:MM:SS format
-uploadObject.time =hours  + minutes + seconds;
-
-
-console.log(uploadObject.value);
+    console.log(uploadObject.value);
     console.log(uploadObject.id);
     console.log(messageNumber);
     console.log(uploadObject.date);
