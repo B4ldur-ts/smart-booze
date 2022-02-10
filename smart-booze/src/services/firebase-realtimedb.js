@@ -7,12 +7,12 @@ import "firebase/compat/messaging";
 import {
   getDatabase,
   ref,
- // onValue,
+  onValue,
   child,
   get,
   update,
 } from "firebase/database";
-// import store from "../store/index";
+import store from "../store/index";
 // import { v4 as uuidv4 } from "uuid";
 // import {
 //   set as setStorage,
@@ -34,6 +34,7 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = getDatabase();
 const auth = firebase.auth();
+const deviceId = store.getters.deviceId;
 
 export { db, auth };
 
@@ -54,6 +55,15 @@ export async function addUserToDb(name) {
     .catch((error) => {
       console.error(error);
     });
+}
+
+
+export async function getMeasurements() {
+  const reference = ref(db, `/devices/${deviceId}`);
+  onValue(reference, (snapshot) => {
+    let object = snapshot.val();
+    store.commit("setAllMeasurements", object);
+  });
 }
 
 

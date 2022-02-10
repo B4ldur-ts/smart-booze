@@ -53,7 +53,7 @@ let uploadObject = {
     value: "",
     time: "",
     date: "",
-    id: "",
+    //id: "",
 
 }
 
@@ -66,7 +66,7 @@ const client = mqtt.connect('tls://e6c0f2b4d98b45a58474f291fbfdcec4.s1.eu.hivemq
 client.on('message', function (topic, message) {
     let date_ob = new Date();
 
-    uploadObject.id = message.toString().slice(0, 36);
+    let id = message.toString().slice(0, 36);
     uploadObject.value = parseInt(message.toString().slice(42, 47)) / 1000;
     messageNumber = message.toString().slice(36, 42);
     // current date
@@ -98,7 +98,7 @@ client.on('message', function (topic, message) {
     console.log("________________________________");
 
 
-    updateDatabase(uploadObject.id, uploadObject, messageNumber);
+    updateDatabase(id, uploadObject, messageNumber);
 
 });
 // reassurance that the connection worked

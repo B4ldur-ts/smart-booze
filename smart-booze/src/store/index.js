@@ -2,14 +2,8 @@ import { createStore } from "vuex";
 
 export default createStore({
   state: {
-    data: {},
-    darkMode: false,
-    rememberMe: false,
-    anwesenheit: {},
-    wichteln: false,
-    update: {},
-    allUsers: [],
-    punishments: {},
+    allMeasurements: {},
+    deviceId: "29bb3021-e9ce-44d1-9a38-5fe98e89ac83",
   },
   mutations: {
     changeData(state, obj) {
@@ -55,6 +49,12 @@ export default createStore({
       state.anwesenheit[object.index]["coming"] = object.val["coming"];
       state.anwesenheit[object.index]["notComing"] = object.val["notComing"];
     },
+    setAllMeasurements(state, object) {
+      state.allMeasurements = object;
+    },
+    setDeviceId(state, val) {
+      state.deviceId = val;
+    }
   },
   actions: {},
   getters: {
@@ -89,5 +89,11 @@ export default createStore({
     punishments: (state) => {
       return state.punishments;
     },
+    allMeasurements: (state) => {
+      return state.allMeasurements;
+    },
+    deviceId: (state) => {
+      return state.deviceId;
+    }
   },
 });
