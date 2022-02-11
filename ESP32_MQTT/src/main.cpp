@@ -5,13 +5,13 @@
  * Created by Ilias Lamprou, modified heavily by Tobias Schmalzried
  * Jul 13 2021
  */
-
+#include <GSM.h>
 #include <WiFi.h>
 #include "Arduino.h"
 #include <PubSubClient.h>
 #include <WiFiClientSecure.h>
 #include "EEPROM.h"
-
+#define PINNUMBER ""
 //---- WiFi settings
 
 const char *ssid = "devolo-f4068d744d56";
@@ -22,6 +22,9 @@ const char *mqtt_server = "e6c0f2b4d98b45a58474f291fbfdcec4.s1.eu.hivemq.cloud";
 const char *mqtt_username = "B4ldur";
 const char *mqtt_password = "fg%2oR3!Sh6Ntu$Q#571HH$XBp";
 const int mqtt_port = 8883;
+#define GPRS_APN       "GPRS_APN" // replace with your GPRS APN
+#define GPRS_LOGIN     "login"    // replace with your GPRS login
+#define GPRS_PASSWORD  "password" // replace with your GPRS password
 
 //---- Device Settings
 // set when device is initialized
@@ -48,6 +51,18 @@ WiFiClientSecure espClient; // for no secure connection use WiFiClient instead o
 // WiFiClient espClient;
 PubSubClient client(espClient);
 unsigned long lastMsg = 0;
+
+// initialize the library instances
+
+GSMClient client;
+GPRS gprs;
+GSM gsmAccess;
+// This example downloads the URL "http://arduino.cc/latest.txt"
+
+char server[] = "arduino.cc"; // the base URL
+char path[] = "/latest.txt"; // the path
+int port = 80; // the port, 80 for HTTP
+
 
 #define MSG_BUFFER_SIZE (50)
 char msg[MSG_BUFFER_SIZE];
@@ -124,7 +139,59 @@ void setup_wifi()
   Serial.println("\nWiFi connected\nIP address: ");
   Serial.println(WiFi.localIP());
 }
+void gsm()
+{
+  while(notConnected)
 
+  {
+
+    if((gsmAccess.begin(PINNUMBER)==GSM_READY) &
+
+        (gprs.attachGPRS(GPRS_APN, GPRS_LOGIN, GPRS_PASSWORD)==GPRS_READY))
+
+      notConnected = false;
+
+    else
+
+    {
+
+      Serial.println("Not connected");
+
+      delay(1000);
+
+    }
+
+  }
+  Serial.println("connecting...");
+
+  // if you get a connection, report back via serial:
+
+  if (client.connect(server, port))
+
+  {
+
+    Serial.println("connected");
+
+    // Make a HTTP request:
+
+    client.print("GET ");
+
+    client.print(path);
+
+    client.println(" HTTP/1.0");
+
+    client.println();
+
+  }
+
+  else
+
+  {
+
+     Serial.println("connection failed");
+
+  }
+}
 //================= Reconnect to the broker ==============
 void reconnect()
 {
