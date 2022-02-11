@@ -59,8 +59,8 @@ GPRS gprs;
 GSM gsmAccess;
 // This example downloads the URL "http://arduino.cc/latest.txt"
 
-char server[] = "arduino.cc"; // the base URL
-char path[] = "/latest.txt"; // the path
+char server[] = "e6c0f2b4d98b45a58474f291fbfdcec4.s1.eu.hivemq.cloud"; // the base URL
+//char path[] = "/latest.txt"; // the path
 int port = 80; // the port, 80 for HTTP
 
 
@@ -174,13 +174,13 @@ void gsm()
 
     // Make a HTTP request:
 
-    client.print("GET ");
+    //client.print("GET ");
 
-    client.print(path);
+    //client.print(path);
 
-    client.println(" HTTP/1.0");
+    //client.println(msg);
 
-    client.println();
+    //client.println();
 
   }
 
