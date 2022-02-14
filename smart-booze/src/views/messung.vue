@@ -54,16 +54,7 @@
 				</ion-row>
 				<ion-row id="row-3">
 					<ion-col>
-						<seven-segment
-							value="8"
-							:rounded="false"
-							:segment-width="25"
-							:segment-height="5"
-							on-color="#f00"
-							off-color="transparent"
-						/>
-
-						<!-- <ion-text id="text-promille" v-if="valuesLoaded">
+						<ion-text id="text-promille" v-if="valuesLoaded">
 							{{
 								measurements[
 									Object.keys(measurements)[
@@ -72,7 +63,23 @@
 								].value
 							}}
 							&permil;
-						</ion-text> -->
+						</ion-text>
+					</ion-col>
+				</ion-row>
+				<ion-row id="row-4">
+					<ion-col id="col-4-1">
+						<ion-text>
+							Tage trocken: <br />
+							Längste Trocken Streak: <br />
+							Tage mit kritischen Werten: <br />
+						</ion-text>
+					</ion-col>
+					<ion-col id="col-4-2" size="3">
+						<ion-text>
+							{{ daysSober }} <br />
+							{{ longestSoberStreak }} <br />
+							{{ criticalDays }} <br />
+						</ion-text>
 					</ion-col>
 				</ion-row>
 			</ion-grid>
@@ -81,7 +88,6 @@
 </template>
 
 <script >
-/* eslint-disable no-unused-vars */
 import {  defineComponent } from 'vue';
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonGrid, IonCol, IonRow } from '@ionic/vue';
 import {translate} from "@/services/animate"
@@ -95,6 +101,9 @@ export default  defineComponent({
     return {
       rotationAngle :  0,
 	  valuesLoaded : false,
+	  criticalDays: 0,
+	  longestSoberStreak: 0,
+	  daysSober : 0,
     };
   },
   async mounted(){
@@ -106,12 +115,13 @@ export default  defineComponent({
 		let allMeasurementsObject = this.$store.getters.allMeasurements;
 		return allMeasurementsObject;
 		// Object.keys(measurements)[Object.keys(measurements).length - 1]
-	}
+	},
   },
   watch:{
 	  measurements(newVal){
 		  this.valuesLoaded = true;
 		  this.go(newVal);
+		  this.getCriticalDays(newVal);
 	  }
   },
   methods:{
@@ -133,6 +143,34 @@ export default  defineComponent({
 	
     },
 
+	async getCriticalDays(x){
+		let daysArr = [];
+		let  i = 0;
+		for (let element in x) {
+			if(x[element]['value'] > 1 && !daysArr.includes(x[element]['date']) ) {
+				i++;
+				daysArr.push(x[element]['date'])
+			}
+		}
+		this.criticalDays = i;
+		i = 0;
+	},
+
+	getSoberStreak(x){
+		return x;
+	},
+
+	getdaysSober(x){
+		return x;
+	},
+
+	getStats(allMeasurements){
+		const x = JSON.parse(JSON.stringify(allMeasurements))
+		this.getCriticalDays(x);
+		this.getdaysSober(x);
+		this.getSoberStreak(x);
+	},
+
     makeCircle(){
       let radius = (screen.width/2) * 0.8;
       let step = Math.PI / 20;
@@ -152,7 +190,6 @@ export default  defineComponent({
     }
   },
 });
-/* eslint-enable no-unused-vars */
 
 </script>
 
@@ -230,7 +267,17 @@ ion-grid {
 	height: 15%;
 }
 #row-3 {
-	height: 50%;
+	height: 10%;
+}
+#row-4 {
+	height: 30%;
+}
+
+#col-4-1 {
+	text-align: left;
+}
+#col-4-2 {
+	text-align: right;
 }
 ion-col {
 	background-color: #f7f7f7;
