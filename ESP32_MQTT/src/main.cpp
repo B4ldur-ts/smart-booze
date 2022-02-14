@@ -1,5 +1,4 @@
-/*
- * Virtuino MQTT getting started example
+/*Virtuino MQTT getting started example
  * Broker: HiveMQ (Secure connection)
  * Supported boards: ESP8266 / ESP32
  * Created by Ilias Lamprou, modified heavily by Tobias Schmalzried
@@ -8,8 +7,8 @@
 #include <GSM.h>
 #include <WiFi.h>
 #include "Arduino.h"
-#include <PubSubClient.h>
-#include <WiFiClientSecure.h>
+//#include <PubSubClient.h>
+//#include <WiFiClientSecure.h>
 #include "EEPROM.h"
 #define PINNUMBER ""
 //---- WiFi settings
@@ -19,9 +18,11 @@ const char *password = "CFUCLFLIXVPOJKEL";
 
 //---- MQTT Broker settings
 const char *mqtt_server = "e6c0f2b4d98b45a58474f291fbfdcec4.s1.eu.hivemq.cloud"; // replace with your broker url
-const char *mqtt_username = "B4ldur";
-const char *mqtt_password = "fg%2oR3!Sh6Ntu$Q#571HH$XBp";
-const int mqtt_port = 8883;
+//const char *mqtt_username = "B4ldur";
+//const char *mqtt_password = "fg%2oR3!Sh6Ntu$Q#571HH$XBp";
+//const int mqtt_port = 8883;
+
+//---------network settings
 #define GPRS_APN       "GPRS_APN" // replace with your GPRS APN
 #define GPRS_LOGIN     "login"    // replace with your GPRS login
 #define GPRS_PASSWORD  "password" // replace with your GPRS password
@@ -57,7 +58,7 @@ unsigned long lastMsg = 0;
 GSMClient client;
 GPRS gprs;
 GSM gsmAccess;
-// This example downloads the URL "http://arduino.cc/latest.txt"
+// 
 
 char server[] = "e6c0f2b4d98b45a58474f291fbfdcec4.s1.eu.hivemq.cloud"; // the base URL
 //char path[] = "/latest.txt"; // the path
@@ -142,55 +143,38 @@ void setup_wifi()
 void gsm()
 {
   while(notConnected)
-
   {
-
-    if((gsmAccess.begin(PINNUMBER)==GSM_READY) &
-
-        (gprs.attachGPRS(GPRS_APN, GPRS_LOGIN, GPRS_PASSWORD)==GPRS_READY))
-
+    if((gsmAccess.begin(PINNUMBER)==GSM_READY) & (gprs.attachGPRS(GPRS_APN, GPRS_LOGIN, GPRS_PASSWORD)==GPRS_READY))
       notConnected = false;
-
     else
-
     {
-
       Serial.println("Not connected");
-
       delay(1000);
-
     }
-
   }
   Serial.println("connecting...");
-
   // if you get a connection, report back via serial:
-
   if (client.connect(server, port))
-
   {
-
     Serial.println("connected");
-
     // Make a HTTP request:
-
     //client.print("GET ");
-
     //client.print(path);
-
     //client.println(msg);
-
     //client.println();
-
   }
-
   else
-
   {
-
      Serial.println("connection failed");
-
   }
+}
+void gsmsend(const char *topic, String payload, boolean retained)
+{
+  client.print("GET ");
+  client.print(path);
+  client.write((byte *)payload.c_str(), 46)
+  //client.publish(topic, (byte *)payload.c_str(), 46,);
+  Serial.println("Message published [" + String(topic) + "]: " + payload);
 }
 //================= Reconnect to the broker ==============
 void reconnect()
@@ -225,11 +209,12 @@ void setup()
   Serial.begin(115200);
   while (!Serial)
     delay(1);
-  setup_wifi();
+  //setup_wifi();
+  gsm();
   EEPROM.begin(4);
   messagesSent = EEPROM.read(1);
 
-  espClient.setCACert(root_ca); // enable this line and the the "certificate" code for secure connection
+  //espClient.setCACert(root_ca); // enable this line and the the "certificate" code for secure connection
   updatePaths();
   client.setServer(mqtt_server, mqtt_port);
   client.setCallback(callback);
@@ -240,9 +225,9 @@ void setup()
 void loop()
 {
 
-  if (!client.connected())
-    reconnect();
-  client.loop();
+  //if (!client.connected())
+    //reconnect();
+  //client.loop();
 
   unsigned long now = millis();
   if (now - lastMsg > 10000)
@@ -333,7 +318,8 @@ void sendValueToBroker(float value)
   valueInt = value * 1000; // convert to int to save some storage and avoid sprintf w/ float. Needs to be converted back.
   snprintf(valueString, 5, "%04d", valueInt);
   strcat(message, valueString);
-  publishMessage(path, message, true);
+  //publishMessage(path, message, true);
+  gsmsend(path, message);
   updatePaths();
   messagesSent++;
   EEPROM.write(1, messagesSent);
