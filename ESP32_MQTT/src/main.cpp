@@ -13,8 +13,7 @@
 #define PINNUMBER ""
 //---- WiFi settings
 
-const char *ssid = "devolo-f4068d744d56";
-const char *password = "CFUCLFLIXVPOJKEL";
+
 
 //---- MQTT Broker settings
 const char *mqtt_server = "e6c0f2b4d98b45a58474f291fbfdcec4.s1.eu.hivemq.cloud"; // replace with your broker url
@@ -48,9 +47,9 @@ int valueInt = 0;
 String date = "06042022";
 String timeNow = "0856";
 
-WiFiClientSecure espClient; // for no secure connection use WiFiClient instead of WiFiClientSecure
+//WiFiClientSecure espClient; // for no secure connection use WiFiClient instead of WiFiClientSecure
 // WiFiClient espClient;
-PubSubClient client(espClient);
+//PubSubClient client(espClient);
 unsigned long lastMsg = 0;
 
 // initialize the library instances
