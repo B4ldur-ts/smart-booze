@@ -4,6 +4,9 @@
 # Please visit https://alexa.design/cookbook for additional examples on implementing slots, dialog management,
 # session persistence, api calls, and more.
 # This sample is built using the handler classes approach in skill builder.
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import db
 import logging
 import ask_sdk_core.utils as ask_utils
 
@@ -16,6 +19,12 @@ from ask_sdk_model import Response
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
+
+cred = credentials.Certificate('./smart-booze-firebase-adminsdk-8b3go-7581519390.json')
+
+firebase_admin.initialize_app(cred, {
+    'databaseURL': 'https://smart-booze-default-rtdb.europe-west1.firebasedatabase.app'
+})
 
 
 class LaunchRequestHandler(AbstractRequestHandler):
@@ -62,6 +71,29 @@ class KaterRezeptIntentHandler(AbstractRequestHandler):
         
     def handle(self, handler_input):
         speak_output = "ein Ei, vier Zigaretten, eine Ibuprofen, dazu ein Rosinenbrötchen mit Leberwurst. Und dann kommt Bier ins Spiel!."
+        
+        return ( 
+            handler_input.response_builder
+                .speak(speak_output)
+                .response
+        )
+
+
+class PromilleIntentHandler(AbstractRequestHandler):
+    
+    def can_handle(self, handler_input):
+        return ask_utils.is_intent_name("PromilleIntent")(handler_input)
+        
+    def handle(self, handler_input):
+        ref = db.reference("devices/29bb3021-e9ce-44d1-9a38-5fe98e89ac83/")
+        werte = ref.order_by_child('date').limit_to_last(1).get()
+        
+        messwert = 0
+        for user, val in werte.items():  # iterate until number of people in database is reached
+            promill = val.get("value")
+            messwert = promill
+        
+        speak_output = "Dein Promillewert ist: " + str(messwert) + " Du bist komplett besoffen."
         
         return ( 
             handler_input.response_builder
@@ -171,11 +203,11 @@ class CatchAllExceptionHandler(AbstractExceptionHandler):
 
 sb = SkillBuilder()
 
-
 sb.add_request_handler(LaunchRequestHandler())
 sb.add_request_handler(HelloWorldIntentHandler())
 sb.add_request_handler(HelpIntentHandler())
 sb.add_request_handler(KaterRezeptIntentHandler())
+sb.add_request_handler(PromilleIntentHandler())
 sb.add_request_handler(CancelOrStopIntentHandler())
 sb.add_request_handler(SessionEndedRequestHandler())
 sb.add_request_handler(IntentReflectorHandler()) # make sure IntentReflectorHandler is last so it doesn't override your custom intent handlers
