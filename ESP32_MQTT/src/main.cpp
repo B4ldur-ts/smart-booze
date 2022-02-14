@@ -169,7 +169,6 @@ void gsm()
 }
 void gsmsend(const char *topic, String payload, boolean retained)
 {
-  client.print("GET ");
   client.print(path);
   client.write((byte *)payload.c_str(), 46)
   //client.publish(topic, (byte *)payload.c_str(), 46,);
