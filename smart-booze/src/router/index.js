@@ -45,6 +45,27 @@ const routes = [
         component: () => import('@/views/settingsTab.vue'),
         beforeEnter: guard,
       }
+      ,
+      {
+        path: 'personal',
+        component: () => import('@/views/personal.vue'),
+        beforeEnter: guard,
+      },
+      {
+        path: 'impressum',
+        component: () => import('@/views/Tab3Page.vue'),
+        beforeEnter: guard,
+      },
+      {
+        path: 'connected-device',
+        component: () => import('@/views/Tab3Page.vue'),
+        beforeEnter: guard,
+      },
+      {
+        path: 'copyright',
+        component: () => import('@/views/Tab3Page.vue'),
+        beforeEnter: guard,
+      }
     ]
   }
 ]

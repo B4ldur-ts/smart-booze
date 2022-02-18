@@ -35,20 +35,20 @@
       </ion-header>
     <div class="list-bottom">
     <ion-list lines="none">
-      <ion-item :detail="true">
+      <ion-item :detail="true" @click="() => router.push('/tabs/personal')">
         Persönliches
       </ion-item>
-      <ion-item :detail="true">
+      <ion-item :detail="true" @click="() => router.push('/tabs/connected-device')">
         Verbundenes Gerät
       </ion-item>
       <ion-item>
         <ion-label> Dark Mode </ion-label>
         <ion-checkbox v-model="darkMode" checked="darkMode"> </ion-checkbox>
       </ion-item>
-      <ion-item :detail="true">
+      <ion-item :detail="true"  @click="() => router.push('/tabs/impressum')">
         Impressum
       </ion-item>
-      <ion-item :detail="true">
+      <ion-item :detail="true" @click="() => router.push('/tabs/copyright')">
         Lizenzen & Copyright
       </ion-item>
     </ion-list>
@@ -170,6 +170,9 @@ export default {
       this.connected = navigator.onLine;
       setInterval(this.checkConnectionWrapper, 5);
     },
+    goToPersonal(){
+      this.router.push("/personal");
+    }
   },
 };
 </script>
