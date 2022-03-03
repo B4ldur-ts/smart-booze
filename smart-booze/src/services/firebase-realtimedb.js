@@ -34,7 +34,8 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = getDatabase();
 const auth = firebase.auth();
-const deviceId = store.getters.deviceId;
+// const deviceId = store.getters.deviceId;
+const deviceId = "29bb3021-e9ce-44d1-9a38-5fe98e89ac83";
 
 export { db, auth };
 
@@ -59,7 +60,7 @@ export async function addUserToDb(name) {
 
 
 export async function getMeasurements() {
-  const reference = ref(db, `/devices/${deviceId}`);
+  const reference = ref(db, `/devices/${deviceId}/`);
   onValue(reference, (snapshot) => {
     let object = snapshot.val();
     store.commit("setAllMeasurements", object);
