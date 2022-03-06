@@ -1,0 +1,13 @@
+{
+  "rules": {
+    ".read": true,
+    ".write": true,
+    "devices":
+    {
+      "29bb3021-e9ce-44d1-9a38-5fe98e89ac83":
+      {
+        ".indexOn" : ["value","date"]
+      }
+    }
+  }
+}
