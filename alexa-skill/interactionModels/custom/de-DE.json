@@ -1,0 +1,81 @@
+{
+  "interactionModel": {
+    "languageModel": {
+      "invocationName": "smart booze",
+      "intents": [
+        {
+          "name": "AMAZON.CancelIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.HelpIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.StopIntent",
+          "samples": []
+        },
+        {
+          "name": "HelloWorldIntent",
+          "slots": [],
+          "samples": [
+            "hallo",
+            "wie geht\u0027s dir",
+            "sag hallo welt",
+            "sag hallo"
+          ]
+        },
+        {
+          "name": "AMAZON.NavigateHomeIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.FallbackIntent",
+          "samples": []
+        },
+        {
+          "name": "KaterRezeptIntent",
+          "slots": [],
+          "samples": [
+            "Lies mir ein Rezept gegen einen Kater vor",
+            "Rezepte gegen Kater",
+            "Katerrezepte",
+            "Kater",
+            "Was hilft gegen Kater",
+            "Was kann ich bei einem Kater tun",
+            "Lies mir ein Katerrezept vor"
+          ]
+        },
+        {
+          "name": "PromilleIntent",
+          "slots": [],
+          "samples": [
+            "Habe ich Alkohol getrunken",
+            "Wie betrunken bin ich",
+            "Wie besoffen bin ich",
+            "Bin ich besoffen",
+            "Bin ich nüchtern",
+            "Wie viele Promille habe ich",
+            "Kann ich Auto fahren",
+            "Bin ich betrunken"
+          ]
+        },
+        {
+          "name": "NuechternIntent",
+          "slots": [],
+          "samples": [
+            "Wann bin ich fahrtüchtig",
+            "Wann darf ich Auto fahren",
+            "Wie lange noch bis ich fahren darf",
+            "Wann kann ich wieder Auto fahren",
+            "Wann bin ich wieder fahrtüchtig",
+            "Wann kann ich Auto fahren",
+            "Wann bin ich nüchtern"
+          ]
+        }
+      ],
+      "types": []
+    }
+  },
+  "version": "13"
+}
