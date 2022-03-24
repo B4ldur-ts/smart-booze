@@ -14,8 +14,8 @@
 #define PINNUMBER ""
 //---- WiFi settings
 
-const char *ssid = "devolo-f4068d744d56";
-const char *password = "CFUCLFLIXVPOJKEL";
+const char *ssid = "";
+const char *password = "";
 
 //---- MQTT Broker settings
 const char *mqtt_server = "e6c0f2b4d98b45a58474f291fbfdcec4.s1.eu.hivemq.cloud"; // replace with your broker url
