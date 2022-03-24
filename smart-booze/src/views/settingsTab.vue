@@ -35,9 +35,9 @@
       </ion-header>
     <div class="list-bottom">
     <ion-list lines="none">
-      <ion-item :detail="true" @click="() => router.push('/tabs/personal')">
+      <!-- <ion-item :detail="true" @click="() => router.push('/tabs/personal')">
         Persönliches
-      </ion-item>
+      </ion-item> -->
       <ion-item :detail="true" @click="() => router.push('/tabs/connected-device')">
         Verbundenes Gerät
       </ion-item>

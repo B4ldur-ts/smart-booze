@@ -1,7 +1,3 @@
-/*
- * Copyright 2021 HiveMQ GmbH
- */
-
 const mqtt = require('mqtt');
 let firebase = require('firebase/app');
 let firebasedb = require('firebase/database');
@@ -14,22 +10,13 @@ let firebasedb = require('firebase/database');
 //     update,
 // } from "firebase/database";
 
+let secret = require("./secret.json")
 
 let received = 0;
 
 
 
-const firebaseConfig = {
-    apiKey: "AIzaSyCK7xzDTTzflkvvpLtaEuUSZdBR3Qq-2R4",
-    authDomain: "smart-booze.firebaseapp.com",
-    databaseURL: "https://smart-booze-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId: "smart-booze",
-    storageBucket: "smart-booze.appspot.com",
-    messagingSenderId: "778984110570",
-    appId: "1:778984110570:web:17e6901ea09bc0ed6f1a93",
-    measurementId: "G-F7YTZVB9RV"
-};
-
+const firebaseConfig = JSON.parse(JSON.stringify(secret))[0];
 const app = firebase.initializeApp(firebaseConfig);
 
 // Get a reference to the database service
@@ -63,12 +50,14 @@ let messageNumber;
 const client = mqtt.connect('tls://e6c0f2b4d98b45a58474f291fbfdcec4.s1.eu.hivemq.cloud', options);
 
 
-client.on('message', function (topic, message) {
-    let date_ob = new Date();
+const zeroPad = (num, places) => String(num).padStart(places, '0')
 
-    let id = message.toString().slice(0, 36);
-    uploadObject.value = parseInt(message.toString().slice(42, 47)) / 1000;
-    messageNumber = message.toString().slice(36, 42);
+client.on('message', function (topic, message) {
+    message = message.toString()
+    let date_ob = new Date();
+    let id = message.slice(0, 36);
+    uploadObject.value = parseInt(message.slice(36, 41)) / 1000;
+    messageNumber = zeroPad(parseInt(message.slice(41, 48)), 7);
     // current date
     // adjust 0 before single digit date
     let date = ("0" + date_ob.getDate()).slice(-2);
@@ -89,16 +78,12 @@ client.on('message', function (topic, message) {
     // prints time in HH:MM:SS format
     uploadObject.time = hours.toString() + minutes.toString() + seconds.toString();
 
+    try {
+        updateDatabase(id, uploadObject, messageNumber);
 
-    console.log(uploadObject.value);
-    console.log(uploadObject.id);
-    console.log(messageNumber);
-    console.log(uploadObject.date);
-    console.log(uploadObject.time);
-    console.log("________________________________");
-
-
-    updateDatabase(id, uploadObject, messageNumber);
+    } catch (error) {
+        console.log(error)
+    }
 
 });
 // reassurance that the connection worked

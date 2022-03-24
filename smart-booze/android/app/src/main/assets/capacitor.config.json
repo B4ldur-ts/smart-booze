@@ -1,0 +1,6 @@
+{
+	"appId": "io.ionic.starter",
+	"appName": "smart-booze",
+	"webDir": "dist",
+	"bundledWebRuntime": false
+}

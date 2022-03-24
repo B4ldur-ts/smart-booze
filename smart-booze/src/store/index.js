@@ -4,6 +4,7 @@ export default createStore({
   state: {
     allMeasurements: {},
     deviceId: "29bb3021-e9ce-44d1-9a38-5fe98e89ac83",
+
   },
   mutations: {
     setdarkMode(state, val) {
@@ -17,7 +18,8 @@ export default createStore({
     },
     setDeviceId(state, val) {
       state.deviceId = val;
-    }
+    },
+
   },
   actions: {},
   getters: {
@@ -35,6 +37,7 @@ export default createStore({
     },
     deviceId: (state) => {
       return state.deviceId;
-    }
+    },
+
   },
 });

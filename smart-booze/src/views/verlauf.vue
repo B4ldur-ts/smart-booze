@@ -33,11 +33,7 @@
         <ion-row>
           <ion-col>
             <div>
-              <lineChart
-                ref="refLine"
-                :chart-data="testData"
-                :options="options"
-              >
+              <lineChart ref="refLine" :chart-data="testData" :options="scale">
               </lineChart>
             </div>
           </ion-col>
@@ -102,6 +98,68 @@ export default defineComponent({
       let allMeasurementsObject = this.$store.getters.allMeasurements;
       return allMeasurementsObject;
       // Object.keys(measurements)[Object.keys(measurements).length - 1]
+    },
+    scale() {
+      let min,
+        max = 0;
+      switch (this.timeRange) {
+        case "today":
+          min = 0;
+          max = 3;
+          break;
+        case "days":
+          min = 0;
+          max = 3;
+          break;
+        case "month":
+          min = 0;
+          max = 3;
+          break;
+        case "2022":
+          min = 0;
+          max = 0.5;
+          break;
+      }
+
+      return {
+        responsive: true,
+        animation: {
+          duration: 10,
+        },
+        elements: {
+          point: {
+            radius: 0,
+          },
+        },
+        scales: {
+          y: {
+            min: min,
+            grid: {
+              drawOnChartArea: false,
+            },
+            max: max,
+          },
+          x: {
+            grid: {
+              drawOnChartArea: false,
+            },
+            display: true,
+            title: {
+              display: true,
+              text: "Date",
+            },
+          },
+        },
+        plugins: {
+          legend: {
+            position: "bottom",
+          },
+          title: {
+            display: false,
+            text: "Solar Data",
+          },
+        },
+      };
     },
     testData() {
       let labels = [];

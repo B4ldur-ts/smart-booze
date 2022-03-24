@@ -10,6 +10,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@capacitor/android": "3.4.3",
     "@capacitor/app": "1.1.0",
     "@capacitor/core": "3.4.0",
     "@capacitor/haptics": "1.1.4",
@@ -22,7 +23,7 @@
     "chart.js": "^3.7.1",
     "core-js": "^3.6.5",
     "datejs": "^1.0.0-rc3",
-    "dayjs": "^1.10.8",
+    "dayjs": "^1.11.0",
     "firebase": "^9.6.6",
     "idb-keyval": "^6.1.0",
     "vue": "^3.2.21",

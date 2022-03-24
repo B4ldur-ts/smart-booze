@@ -1,0 +1,24 @@
+  <!-- <ion-text id="text-promille" v-if="valuesLoaded">
+              {{
+                 measurements[
+                  Object.keys(measurements)[
+                    Object.keys(measurements).length - 1
+                  ]
+                ].value
+              }}
+              &permil;
+            </ion-text> -->
+
+
+
+             <ion-text
+              v-if="
+                measurements[
+                  Object.keys(measurements)[
+                    Object.keys(measurements).length - 1
+                  ]
+                ].value > 0
+              "
+            >
+              Wieder nüchtern: {{ soberBy }}
+            </ion-text>
