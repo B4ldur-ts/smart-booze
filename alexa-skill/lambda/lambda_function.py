@@ -131,7 +131,7 @@ class NuechternIntentHandler(AbstractRequestHandler):
         df = pd.DataFrame(values)
         df['dates'] = pd.to_datetime(df['dates'], format='%Y%m%d %H%M%S')
         
-        stunden = messwert / 0.1
+        stunden = messwert / 0.15
         uhrzeit_nuechtern = df['dates'].iloc[0] + pd.DateOffset(hours=stunden)
         speak_output = "Du kannst nach " + str(stunden) + " Stunden wieder Auto fahren. Das ist um "
         speak_output = speak_output + str(uhrzeit_nuechtern.hour) + ' Uhr ' + str(uhrzeit_nuechtern.minute)

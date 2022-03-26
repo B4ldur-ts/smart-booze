@@ -1,7 +1,7 @@
 {
   "interactionModel": {
     "languageModel": {
-      "invocationName": "smart booze",
+      "invocationName": "intelligenter alkohol sensor",
       "intents": [
         {
           "name": "AMAZON.CancelIntent",
@@ -77,5 +77,5 @@
       "types": []
     }
   },
-  "version": "13"
+  "version": "20"
 }

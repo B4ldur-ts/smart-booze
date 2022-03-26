@@ -1,5 +1,32 @@
 {
   "manifest": {
+    "publishingInformation": {
+      "locales": {
+        "de-DE": {
+          "summary": "Smartbooze verbessert den Alkoholgenuss.",
+          "examplePhrases": [
+            "Alexa, frag intelligenter alkohol sensor habe ich alkohol getrunken",
+            "Alexa, frag intelligenter alkohol sensor was hilft gegen einen kater",
+            "Alexa, frag intelligenter alkohol sensor wann bin ich fahrtüchtig"
+          ],
+          "keywords": [],
+          "name": "Smartbooze",
+          "description": "Smartbooze verbessert den Alkoholgenuss.  Außerdem erleichtert Smartbooze den verantwortungsvollen Umgang mit alkoholischen Getränken.",
+          "smallIconUri": "file://assets/images/de-DE_smallIconUri.png",
+          "largeIconUri": "file://assets/images/de-DE_largeIconUri.png"
+        }
+      },
+      "automaticDistribution": {
+        "isActive": false
+      },
+      "isAvailableWorldwide": false,
+      "testingInstructions": "Sample Testing Instructions.",
+      "category": "HEALTH_AND_FITNESS",
+      "distributionMode": "PUBLIC",
+      "distributionCountries": [
+        "DE"
+      ]
+    },
     "apis": {
       "custom": {
         "endpoint": {
@@ -7,14 +34,14 @@
         },
         "interfaces": [],
         "regions": {
-          "NA": {
-            "endpoint": {
-              "uri": "arn:aws:lambda:us-east-1:400879621355:function:344d3d50-66cd-4c5a-aaa5-f2a1a334472f:Release_0"
-            }
-          },
           "EU": {
             "endpoint": {
               "uri": "arn:aws:lambda:eu-west-1:400879621355:function:344d3d50-66cd-4c5a-aaa5-f2a1a334472f:Release_0"
+            }
+          },
+          "NA": {
+            "endpoint": {
+              "uri": "arn:aws:lambda:us-east-1:400879621355:function:344d3d50-66cd-4c5a-aaa5-f2a1a334472f:Release_0"
             }
           },
           "FE": {
@@ -26,24 +53,15 @@
       }
     },
     "manifestVersion": "1.0",
-    "publishingInformation": {
-      "category": "KNOWLEDGE_AND_TRIVIA",
-      "distributionCountries": [],
-      "isAvailableWorldwide": true,
+    "privacyAndCompliance": {
+      "allowsPurchases": false,
       "locales": {
-        "de-DE": {
-          "description": "Sample Full Description",
-          "examplePhrases": [
-            "Alexa öffne hallo welt",
-            "hallo",
-            "hilfe"
-          ],
-          "keywords": [],
-          "name": "Smartbooze",
-          "summary": "Sample Short Description"
-        }
+        "de-DE": {}
       },
-      "testingInstructions": "Sample Testing Instructions."
+      "containsAds": false,
+      "isExportCompliant": true,
+      "isChildDirected": false,
+      "usesPersonalInfo": false
     }
   }
 }
